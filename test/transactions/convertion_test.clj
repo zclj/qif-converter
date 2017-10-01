@@ -1,7 +1,8 @@
 (ns transactions.convertion-test
   (:require [clojure.test :refer :all ]
             [transactions.convertion :as c]
-            [clojure.java.io :refer [reader]]))
+            [clojure.java.io :refer [reader]]
+            [transactions.csv-utils :as csv]))
 
 
 (def transactions (line-seq (reader "./test/resources/test-transactions.txt")))
@@ -24,6 +25,7 @@
            (list "!Account" "NRäkningar" "^" "!Type:Bank")))))
 
 (def transaction-line-1 "11-12-30 	11-12-30  	One  	  	-56,50 	20 895,12")
+
 (def QIF-list-1
   '("!Account"
     "N"
@@ -64,3 +66,29 @@
            QIF-list-1))))
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; CSV source
+(deftest convert-from-csv-file
+  (testing "Convert transactions from csv file"
+    (let [csv-tx (csv/csv-resource "test-transactions.csv" \;)]
+      (is (= (c/convert-csv (rest csv-tx) accounts)
+             [{:date    "29/09/2017",
+               :desc    "One",
+               :amount  "-1000",
+               :account "Account:NumberOne"}
+              {:date    "29/09/2017",
+               :desc    "Alpha",
+               :amount  "-556",
+               :account "Account:Alphas"}
+              {:date    "28/09/2017",
+               :desc    "Beta",
+               :amount  "-544",
+               :account "Account:Alphas"}
+              {:date    "28/09/2017",
+               :desc    "Trams",
+               :amount  "-100",
+               :account "Unknown"}
+              {:date    "28/09/2017",
+               :desc    "Trams",
+               :amount  "-200",
+               :account "Unknown"}])))))

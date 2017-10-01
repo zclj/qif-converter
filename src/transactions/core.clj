@@ -4,7 +4,8 @@
   (:require [transactions.convertion :as conv]
             [transactions.accounts :as acc]
             [clojure.tools.cli :as tools]
-            [clojure.string :refer [join]]))
+            [clojure.string :refer [join]]
+            [transactions.csv-utils :as csv]))
 
 (def accounts-option
   ["-a" "--accounts" "Path to accounts file" :default "./accounts.xml"])
@@ -20,9 +21,14 @@
   (filter #(not (.exists (File. %))) files))
 
 (defn perform-conv [transactions-uri accounts-uri account-name]
-  (let [transactions (conv/convert-to-data
-                      (conv/load-transactions-file transactions-uri)
-                      (acc/account-map accounts-uri))
+  (let [file-ext (last (clojure.string/split transactions-uri #"\."))
+        transactions (if (= file-ext "csv")
+                       (conv/convert-csv
+                        (rest (csv/csv-from-file transactions-uri \;))
+                        (acc/account-map accounts-uri))
+                       (conv/convert-to-data
+                        (conv/load-transactions-file transactions-uri)
+                        (acc/account-map accounts-uri)))
         unkowns (map #(:desc %) (filter #(= (:account %) "Unknown") transactions))]
     (if (seq unkowns)
       (cons "Missing account description for:"

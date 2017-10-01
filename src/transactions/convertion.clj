@@ -27,6 +27,9 @@
    (str "L" account)
    "^"])
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Convert Text line
+
 (defn convert-line-to-data
   [account-map line]
   (let [columns (map #(.trim %) (split line #"\t+"))
@@ -41,6 +44,22 @@
   [transactions accounts]
   (for [transaction transactions]
     (convert-line-to-data accounts transaction)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; CSV convertion
+
+(defn convert-csv-line-to-data
+  [account-map [desc tx-date amount _]]
+  {:date (convert-date tx-date)
+   :desc desc
+   :amount (clojure.string/replace (clojure.string/replace amount "," ".") " " ",")
+   :account (get account-map desc "Unknown")})
+
+(defn convert-csv
+  [transactions accounts]
+  (mapv #(convert-csv-line-to-data accounts %) transactions))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defn convert-to-QIF [transactions-data account-name]
   (flatten (conj
