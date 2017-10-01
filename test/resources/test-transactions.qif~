@@ -1,0 +1,39 @@
+!Account
+NRäkningar
+^
+!Type:Bank
+D30 /12/11
+T-56.50
+CR
+P
+MOne
+LAccount:NumberOne
+^
+D31 /10/11
+T49.00
+CR
+P
+MAlpha
+LAccount:Alphas
+^
+D30 /12/11
+T-549.00
+CR
+P
+MBeta
+LAccount:Alphas
+^
+D30 /12/11
+T-549.00
+CR
+P
+MTrams
+LAccount:Alphas
+^
+D30 /12/11
+T-549.00
+CR
+P
+MTrams
+LAccount:Alphas
+^

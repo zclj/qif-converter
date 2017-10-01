@@ -1,0 +1,44 @@
+(ns transactions.convertion-test
+  (:use clojure.test
+        transactions.convertion
+        transactions.accounts
+        [clojure.java.io :only [reader]]))
+
+(def correct-QIF
+  '(
+   "!Account",
+   "NRäkningar",
+   "^",
+   "!Type:Bank",
+   "D30/12/11",
+   "T-56.50",
+   "CR",
+   "P",
+   "MOne",
+   "LAccount:NumberOne",
+   "^",
+   "D31/10/11",
+   "T49.00",
+   "CR",
+   "P",
+   "MAlpha",
+   "LAccount:Alphas",
+   "^",
+   "D30/12/11",
+   "T-549.00",
+   "CR",
+   "P",
+   "MBeta",
+   "LAccount:Alphas",
+   "^"))
+
+;(defn load-transactions-file
+;  [file-name]
+;  (line-seq (reader file-name))
+;
+
+;(def transactions (load-transactions-file "/home/stefan/Documents/Utveckling/clojure/transactions/test/resources/appTestTransactions.txt"))
+
+(deftest date-convertion
+  (testing "Correct convertion of dates"
+    (is (= (convert-date "11-10-31") "31/10/11"))))

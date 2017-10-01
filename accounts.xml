@@ -1,0 +1,12 @@
+<?xml version="1.0" ?>
+<mappings>
+  <map account="Account:NumberOne">
+    <from>One</from>
+    <from>Trams</from>
+  </map>
+  <map account="Account:Alphas">
+    <from>Alpha</from>
+    <from>Beta</from>
+    <from>Gamma</from>
+  </map>
+</mappings>
