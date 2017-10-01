@@ -3,8 +3,8 @@
   (:import (java.io File))
   (:require [transactions.convertion :as conv]
             [transactions.accounts :as acc]
-            [clojure.tools.cli :as tools])
-  (:use [clojure.string :only [join]]))
+            [clojure.tools.cli :as tools]
+            [clojure.string :refer [join]]))
 
 (def accounts-option
   ["-a" "--accounts" "Path to accounts file" :default "./accounts.xml"])
